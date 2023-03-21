@@ -1,0 +1,21 @@
+---
+- hosts: siva_ec2.yml
+  user: ec2-user
+  become: yes
+  connection: ssh
+
+  vars:
+    ansible_ssh_private_key_file: "/ect/ansible/"
+    ansible_ssh_user: "ec2-user"
+  tasks:
+    - name: install git in prod
+      yum: name=httpd state=persent
+    - name: install httpd server
+      yum: name=httpd state=present
+    - name: restarting web server
+      service: name=httpd state=restarted
+    - name: get code into repo
+      git:
+        repo: "https://github.com/Sivaprasad-Software/web-dev-repo.git"
+        dest: "/www/var/html/"
+        version: "appcode"
